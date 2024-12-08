@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        hr {
+            margin: 40px 0;
+        }
+        .results img {
+            width: 200px;
+            height: auto;
+            margin: 10px 0;
+        }
+        .result {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Search</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="query_image">Image Query:</label>
+        <input type="file" name="query_image" id="query_image">
+
+        <label for="query_text">Text Query:</label>
+        <input type="text" name="query_text" id="query_text">
+
+        <label for="weight">Hybrid Query Weight (»):</label>
+        <input type="number" step="0.1" name="weight" id="weight" value="0.5">
+
+        <label for="query_type">Select Query Type:</label>
+        <select name="query_type" id="query_type">
+            <option value="Image query">Image query</option>
+            <option value="Text query">Text query</option>
+            <option value="Hybrid query">Hybrid query</option>
+        </select>
+
+        <input type="submit" value="Search">
+    </form>
+
+    <hr>
+
+    {% if results %}
+        <h2>Top Search Results</h2>
+        <div class="results">
+            {% for result in results %}
+                <div class="result">
+                    <img src="{{ url_for('serve_coco_image', filename=result['file_name']) }}" alt="Result Image">
+                    <p><strong>Similarity:</strong> {{ result['similarity'] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>
